@@ -2,7 +2,7 @@ from flask import Flask,render_template,request,redirect, session,url_for
 
 
 app = Flask(__name__)
-# app.secret_key = 'supersecretkey'  # Substitua por uma chave secreta real
+app.secret_key = 'supersecretkey'  # Substitua por uma chave secreta real
 
 @app.route('/')
 def index():
@@ -11,10 +11,13 @@ def index():
 @app.route('/autenticar',methods=['POST','GET'])
 def autenticar():
     if request.method == 'POST':
-        if request.form['senha'] == 'senac' and request.form['usuario'] == 'walter':
-          return 'logado com sucesso'
+        usuario = request.form['usuario']
+        if request.form['senha'] == 'senac' and usuario == 'walter':
+          session['usuario_logado'] = usuario
+          return "logado com sucesso"
         else:
            return 'erro na autenticacao'
+        
 
 """
 @app.route('/novofuncionario')
@@ -40,12 +43,13 @@ def agendar():
     if not email:
         return redirect(url_for('login'))
     return render_template('agendamento.html', email=email)
+"""
 
 @app.route('/logout')
 def sair():
-    session.pop('email', None)
+    session.pop('usuario_logado', None)
     return redirect(url_for('index'))
 
-"""
+
 app.run(debug=True)
 
