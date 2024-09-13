@@ -2,12 +2,21 @@ from flask import Flask,render_template,request,redirect, session,url_for
 
 
 app = Flask(__name__)
-app.secret_key = 'supersecretkey'  # Substitua por uma chave secreta real
+# app.secret_key = 'supersecretkey'  # Substitua por uma chave secreta real
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
+@app.route('/autenticar',methods=['POST','GET'])
+def autenticar():
+    if request.method == 'POST':
+        if request.form['senha'] == 'senac' and request.form['usuario'] == 'walter':
+          return 'logado com sucesso'
+        else:
+           return 'erro na autenticacao'
+
+"""
 @app.route('/novofuncionario')
 def adicionar_funcionario():
     return "funcionário adicionado"
@@ -37,5 +46,6 @@ def sair():
     session.pop('email', None)
     return redirect(url_for('index'))
 
+"""
 app.run(debug=True)
 
