@@ -1,7 +1,7 @@
 from flask import Flask,render_template,request,redirect, session,url_for
 
-
 app = Flask(__name__)
+
 app.secret_key = 'supersecretkey'  # Substitua por uma chave secreta real
 
 @app.route('/')
@@ -17,7 +17,23 @@ def autenticar():
           return "logado com sucesso"
         else:
            return 'erro na autenticacao'
-        
+
+@app.route('/logout')
+def sair():
+    session.pop('usuario_logado', None)
+    return redirect(url_for('index'))
+
+app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
 
 """
 @app.route('/novofuncionario')
@@ -44,12 +60,3 @@ def agendar():
         return redirect(url_for('login'))
     return render_template('agendamento.html', email=email)
 """
-
-@app.route('/logout')
-def sair():
-    session.pop('usuario_logado', None)
-    return redirect(url_for('index'))
-
-
-app.run(debug=True)
-
