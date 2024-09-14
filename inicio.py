@@ -14,7 +14,7 @@ def autenticar():
         usuario = request.form['usuario']
         if request.form['senha'] == 'senac' and usuario == 'walter':
           session['usuario_logado'] = usuario
-          return "logado com sucesso"
+          return render_template('agendamento.html')
         else:
            return 'erro na autenticacao'
 
