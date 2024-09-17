@@ -1,13 +1,27 @@
-from flask import Flask,render_template,request,redirect, session,url_for
-
+from flask import Flask,render_template,request,redirect, session,url_for,flash
+from usuario import Usuario
 app = Flask(__name__)
 
 app.secret_key = 'supersecretkey'  # Substitua por uma chave secreta real
+
+
+usuario1 = Usuario("bruno", "BD", "123")
+usuario2 = Usuario("camila", "Mila", "paozinho")
+usuario3 = Usuario("guilherme", "Cake", "python_eh_vida")
+
+usuarios = { usuario1.nome : usuario1,
+             usuario2.nome : usuario2,
+             usuario3.nome: usuario3 }
+
+
+
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
+"""
+versão antiga para estudo
 @app.route('/autenticar',methods=['POST','GET'])
 def autenticar():
     if request.method == 'POST':
@@ -17,6 +31,24 @@ def autenticar():
           return render_template('agendamento.html')
         else:
            return 'erro na autenticacao'
+
+"""
+# definir a rota autenticar
+@app.route('/autenticar', methods=['POST',])
+def autenticar(): # criei uma função autenticar
+
+ 
+    
+    if request.form['usuario'] in usuarios: #verifico no dicionário se existe esse usuário
+        usuario = usuarios[request.form['usuario']] # usuário recebe o valor do html
+        if request.form['senha'] == usuario.senha: # se a senha do html for igual do dicionário
+            session['usuario_logado'] = usuario.nickname # então o nickname será armazenado nos cookies
+            #flash(usuario.nickname + ' logado com sucesso!')
+            return "LOGADO"
+    else:
+        flash('Usuário não logado.')
+        return "usuario não logado"
+
 
 @app.route('/logout')
 def sair():
